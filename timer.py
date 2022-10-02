@@ -31,7 +31,6 @@ temp_link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
     
 
 class CWidget(QWidget):
-
     def __init__(self):
         super().__init__()
         self.year = QLCDNumber(self)
@@ -42,8 +41,11 @@ class CWidget(QWidget):
         self.sec = QLCDNumber(self)
         self.editText = QLineEdit()
         self.applyBtn = QPushButton()
-        self.applyBtn.setText("적용")
-        self.applyBtn.setSizePolicy(500, 100)
+        self.applyBtn.setText("적용하기")
+        self.applyBtn.clicked.connect(self.applyBtn_event)
+       
+    
+
 
         self.comboBoxHour = QComboBox(self)
         for hour in range(24):
@@ -156,8 +158,15 @@ class CWidget(QWidget):
         timer = Timer(1, self.showtime)
         timer.start()
 
+
     def onActivated(self, text):
         print(text)
+
+    def applyBtn_event(self):
+        link = self.editText.text()
+        hour = temp_hour
+        minute = temp_minute
+        print(link)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
