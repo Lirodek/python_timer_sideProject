@@ -4,8 +4,7 @@
 
 ### 3. 유튜브 매크로 알람 시계
 
-### 디지털 시계 코드
-# 배광민 첫번째 주석 1 
+### 디지털 시계 코드 
 import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -24,11 +23,15 @@ class CWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.year = QLCDNumber(self)
-        self.month = QLCDNumber(self)
-        self.day = QLCDNumber(self)
-        self.hour = QLCDNumber(self)
-        self.min = QLCDNumber(self)
-        self.sec = QLCDNumber(self)
+        self.month = QLCDNumber()
+        self.day = QLCDNumber()
+        self.hour = QLCDNumber()
+        self.min = QLCDNumber()
+        self.sec = QLCDNumber()
+        self.editText = QLineEdit()
+        self.applyBtn = QPushButton()
+        self.applyBtn.setText("적용")
+        self.applyBtn.setSizePolicy(500, 100)
 
 
         # LCD 글자색 변경
@@ -55,10 +58,15 @@ class CWidget(QWidget):
         hbox2.addWidget(self.min)
         hbox2.addWidget(self.sec)
 
+        hbox4 = QGridLayout()
+        hbox4.addWidget(self.editText)
+        hbox4.addWidget(self.applyBtn)
 
+        
         vbox = QVBoxLayout()
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
+        vbox.addLayout(hbox4)
 
         self.setLayout(vbox)
 
@@ -82,7 +90,7 @@ class CWidget(QWidget):
         self.sec.display(kor.tm_sec)
 
         # 특정 시간에 매크로 시작
-        if kor.tm_hour == 15 and kor.tm_min == 27:
+        if kor.tm_hour == 16 and kor.tm_min == 44:
             if macro == True :
                 pyautogui.typewrite(["WIN"])
                 time.sleep(0.5)
