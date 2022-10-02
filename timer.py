@@ -165,26 +165,22 @@ class CWidget(QWidget):
                 temp+= text[char]
                 
         if text[len(text)-1] == "분":
-            global temp_minute
-            temp_minute = int(temp)
+            temp_minute = temp
         if text[len(text)-1] == "시":
-            global temp_hour
-            temp_hour = int(temp)
+            temp_hour = temp
+       
+        
+        
+    
+        
+    
+
 
     def applyBtn_event(self):
-        global link
         link = self.editText.text()
-        
-        global temp_hour
-        global temp_minute
-
-        global hour
-        global minute
-
         hour = temp_hour
         minute = temp_minute
         print(link)
-        print(temp_hour)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
