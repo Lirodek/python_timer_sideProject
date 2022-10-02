@@ -19,8 +19,8 @@ QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 macro = True
 # ========== 전역 변수 이 값을 바꿀경우  시간, 분등이 바뀜 =========
 hour    = 17
-minute  = 44
-link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
+minute  = 10
+link    = "https://www.youtube.com/watch?v=Y8JFxS1HlDo"
 # =================================================================
 
 # ========== 전역 저장전에 삽입할 템프 =========
@@ -132,7 +132,8 @@ class CWidget(QWidget):
             if macro == True :
                 pyautogui.typewrite(["WIN"])
                 time.sleep(0.5)
-                pyautogui.typewrite('Chrome')
+                clipboard.copy("Chrome")
+                pyautogui.hotkey("ctrl", "V")
                 time.sleep(0.5)
                 pyautogui.typewrite(['enter'])
                 time.sleep(0.5)
@@ -172,19 +173,25 @@ class CWidget(QWidget):
             temp_hour = int(temp)
 
     def applyBtn_event(self):
-        global link
-        link = self.editText.text()
-        
         global temp_hour
         global temp_minute
-
         global hour
         global minute
+        global macro
+        global link
 
-        hour = temp_hour
-        minute = temp_minute
-        print(link)
-        print(temp_hour)
+        reply = QMessageBox.question(self, '확인창', '알람설정하시겠어요?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        
+        if reply == QMessageBox.Yes:
+            macro = True
+
+            if self.editText.text() != "":
+                link = self.editText.text()
+
+            hour = temp_hour
+            minute = temp_minute
+        else:
+            print('취소되었습니다.')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
