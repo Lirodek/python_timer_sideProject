@@ -17,22 +17,48 @@ import clipboard
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 
 macro = True
+# ========== 전역 변수 이 값을 바꿀경우  시간, 분등이 바뀜 =========
+hour    = 17
+minute  = 44
+link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
+# =================================================================
+
+# ========== 전역 저장전에 삽입할 템프 =========
+temp_hour    = 17
+temp_minute  = 44
+temp_link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
+# =================================================================
+    
 
 class CWidget(QWidget):
 
     def __init__(self):
         super().__init__()
         self.year = QLCDNumber(self)
-        self.month = QLCDNumber()
-        self.day = QLCDNumber()
-        self.hour = QLCDNumber()
-        self.min = QLCDNumber()
-        self.sec = QLCDNumber()
+        self.month = QLCDNumber(self)
+        self.day = QLCDNumber(self)
+        self.hour = QLCDNumber(self)
+        self.min = QLCDNumber(self)
+        self.sec = QLCDNumber(self)
         self.editText = QLineEdit()
         self.applyBtn = QPushButton()
         self.applyBtn.setText("적용")
         self.applyBtn.setSizePolicy(500, 100)
 
+        self.comboBoxHour = QComboBox(self)
+        for hour in range(24):
+            strHours = str(hour) + "시"
+            self.comboBoxHour.addItem(strHours)
+        
+        self.comboBoxMinute = QComboBox(self)
+        for minute in range(60):
+            strMinute = str(minute) + "분"
+            self.comboBoxMinute.addItem(strMinute)
+     
+        self.comboBoxHour.activated[str].connect(self.onActivated)
+        self.comboBoxMinute.activated[str].connect(self.onActivated)
+
+        
 
         # LCD 글자색 변경
         pal = QPalette()
@@ -58,20 +84,31 @@ class CWidget(QWidget):
         hbox2.addWidget(self.min)
         hbox2.addWidget(self.sec)
 
+        hbox3 = QHBoxLayout()
+        hbox3.addWidget(self.comboBoxHour)
+        hbox3.addWidget(self.comboBoxMinute)
+        hbox3.addWidget(self.comboBoxMinute)
+        hbox3.addWidget(self.comboBoxMinute)
+
         hbox4 = QGridLayout()
         hbox4.addWidget(self.editText)
         hbox4.addWidget(self.applyBtn)
+        
+
 
         
         vbox = QVBoxLayout()
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
         vbox.addLayout(hbox4)
+        vbox.addLayout(hbox3)
+
+        
 
         self.setLayout(vbox)
 
-        self.setWindowTitle('원킹의 유튜브 알람 시계')
-        self.setGeometry(200, 200, 400, 200)
+        self.setWindowTitle('side Project')
+        self.setGeometry(300, 200, 400, 200)
 
         self.showtime()
 
@@ -90,7 +127,7 @@ class CWidget(QWidget):
         self.sec.display(kor.tm_sec)
 
         # 특정 시간에 매크로 시작
-        if kor.tm_hour == 16 and kor.tm_min == 44:
+        if kor.tm_hour == hour and kor.tm_min == minute:
             if macro == True :
                 pyautogui.typewrite(["WIN"])
                 time.sleep(0.5)
@@ -99,7 +136,7 @@ class CWidget(QWidget):
                 pyautogui.typewrite(['enter'])
                 time.sleep(0.5)
                 #pyautogui.typewrite("https://youtu.be/3iM_06QeZi8")
-                clipboard.copy("https://youtu.be/3iM_06QeZi8")
+                clipboard.copy(link)
                 pyautogui.hotkey("ctrl", "V")
                 time.sleep(0.5)
                 pyautogui.typewrite(["enter"])
@@ -119,6 +156,8 @@ class CWidget(QWidget):
         timer = Timer(1, self.showtime)
         timer.start()
 
+    def onActivated(self, text):
+        print(text)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
