@@ -89,8 +89,6 @@ class CWidget(QWidget):
         hbox3 = QHBoxLayout()
         hbox3.addWidget(self.comboBoxHour)
         hbox3.addWidget(self.comboBoxMinute)
-        hbox3.addWidget(self.comboBoxMinute)
-        hbox3.addWidget(self.comboBoxMinute)
 
         hbox4 = QGridLayout()
         hbox4.addWidget(self.editText)
@@ -102,8 +100,9 @@ class CWidget(QWidget):
         vbox = QVBoxLayout()
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
-        vbox.addLayout(hbox4)
         vbox.addLayout(hbox3)
+        vbox.addLayout(hbox4)
+
 
         
 
@@ -160,7 +159,22 @@ class CWidget(QWidget):
 
 
     def onActivated(self, text):
-        print(text)
+        temp = ""
+        for char in range(len(text)-1):
+            if type(text[char]) != "<class 'str'>" :
+                temp+= text[char]
+                
+        if text[len(text)-1] == "분":
+            temp_minute = temp
+        if text[len(text)-1] == "시":
+            temp_hour = temp
+       
+        
+        
+    
+        
+    
+
 
     def applyBtn_event(self):
         link = self.editText.text()
