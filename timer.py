@@ -18,6 +18,18 @@ import clipboard
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 
 macro = True
+# ========== 전역 변수 이 값을 바꿀경우  시간, 분등이 바뀜 =========
+hour    = 17
+minute  = 44
+link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
+# =================================================================
+
+# ========== 전역 저장전에 삽입할 템프 =========
+temp_hour    = 17
+temp_minute  = 44
+temp_link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
+# =================================================================
+    
 
 class CWidget(QWidget):
 
@@ -29,6 +41,7 @@ class CWidget(QWidget):
         self.hour = QLCDNumber(self)
         self.min = QLCDNumber(self)
         self.sec = QLCDNumber(self)
+        
 
         self.comboBoxHour = QComboBox(self)
         for hour in range(24):
@@ -39,9 +52,6 @@ class CWidget(QWidget):
         for minute in range(60):
             strMinute = str(minute) + "분"
             self.comboBoxMinute.addItem(strMinute)
-
-        self.editBox = QLineEdit(self)
-
      
         self.comboBoxHour.activated[str].connect(self.onActivated)
         self.comboBoxMinute.activated[str].connect(self.onActivated)
@@ -108,7 +118,7 @@ class CWidget(QWidget):
         self.sec.display(kor.tm_sec)
 
         # 특정 시간에 매크로 시작
-        if kor.tm_hour == 15 and kor.tm_min == 27:
+        if kor.tm_hour == hour and kor.tm_min == minute:
             if macro == True :
                 pyautogui.typewrite(["WIN"])
                 time.sleep(0.5)
@@ -117,7 +127,7 @@ class CWidget(QWidget):
                 pyautogui.typewrite(['enter'])
                 time.sleep(0.5)
                 #pyautogui.typewrite("https://youtu.be/3iM_06QeZi8")
-                clipboard.copy("https://youtu.be/3iM_06QeZi8")
+                clipboard.copy(link)
                 pyautogui.hotkey("ctrl", "V")
                 time.sleep(0.5)
                 pyautogui.typewrite(["enter"])
