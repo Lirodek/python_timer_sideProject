@@ -30,6 +30,23 @@ class CWidget(QWidget):
         self.min = QLCDNumber(self)
         self.sec = QLCDNumber(self)
 
+        self.comboBoxHour = QComboBox(self)
+        for hour in range(24):
+            strHours = str(hour) + "시"
+            self.comboBoxHour.addItem(strHours)
+        
+        self.comboBoxMinute = QComboBox(self)
+        for minute in range(60):
+            strMinute = str(minute) + "분"
+            self.comboBoxMinute.addItem(strMinute)
+
+        self.editBox = QLineEdit(self)
+
+     
+        self.comboBoxHour.activated[str].connect(self.onActivated)
+        self.comboBoxMinute.activated[str].connect(self.onActivated)
+
+        
 
         # LCD 글자색 변경
         pal = QPalette()
@@ -55,15 +72,24 @@ class CWidget(QWidget):
         hbox2.addWidget(self.min)
         hbox2.addWidget(self.sec)
 
+        hbox3 = QHBoxLayout()
+        hbox3.addWidget(self.comboBoxHour)
+        hbox3.addWidget(self.comboBoxMinute)
+        hbox3.addWidget(self.comboBoxMinute)
+        hbox3.addWidget(self.comboBoxMinute)
+
 
         vbox = QVBoxLayout()
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
+        vbox.addLayout(hbox3)
+
+        
 
         self.setLayout(vbox)
 
-        self.setWindowTitle('원킹의 유튜브 알람 시계')
-        self.setGeometry(200, 200, 400, 200)
+        self.setWindowTitle('side Project')
+        self.setGeometry(300, 200, 400, 200)
 
         self.showtime()
 
@@ -111,6 +137,8 @@ class CWidget(QWidget):
         timer = Timer(1, self.showtime)
         timer.start()
 
+    def onActivated(self, text):
+        print(text)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
