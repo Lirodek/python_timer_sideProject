@@ -5,7 +5,7 @@
 ### 3. 유튜브 매크로 알람 시계
 
 ### 디지털 시계 코드
-
+# 배광민 첫번째 주석 1 
 import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
