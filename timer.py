@@ -10,6 +10,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from threading import Timer
+import pythonDB
 import time
 import pyautogui
 import clipboard
@@ -92,6 +93,11 @@ class CWidget(QWidget):
         self.applyBtn = QPushButton()
         self.applyBtn.setText("적용하기")
         self.applyBtn.clicked.connect(self.applyBtn_event)
+        self.database = pythonDB
+        rows = self.database.test
+        result = rows()
+        print(result)
+        
 
         # weekButton Setting 일 ~ 월
         self.days = [QLabel('일'),QLabel('월'),QLabel('화'),QLabel('수'),QLabel('목'),QLabel('금'),QLabel('토'),]
