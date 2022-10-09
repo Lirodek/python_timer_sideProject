@@ -33,6 +33,7 @@ temp_link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
 class CWidget(QWidget):
     def __init__(self):
         super().__init__()
+
         self.year = QLCDNumber(self)
         self.month = QLCDNumber(self)
         self.day = QLCDNumber(self)
@@ -107,8 +108,9 @@ class CWidget(QWidget):
         
 
         self.setLayout(vbox)
-
-        self.setWindowTitle('side Project')
+        self.setWindowTitle('Icon')
+        self.setWindowIcon(QIcon('timerIcon.jpeg'))
+        self.setWindowTitle('timer')
         self.setGeometry(300, 200, 400, 200)
 
         self.showtime()
@@ -164,7 +166,6 @@ class CWidget(QWidget):
         for char in range(len(text)-1):
             if type(text[char]) != "<class 'str'>" :
                 temp+= text[char]
-                
         if text[len(text)-1] == "분":
             global temp_minute
             temp_minute = int(temp)
