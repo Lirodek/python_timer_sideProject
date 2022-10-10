@@ -14,6 +14,8 @@ import pythonDB
 import time
 import pyautogui
 import clipboard
+from datetime import datetime
+
 
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
@@ -36,6 +38,7 @@ temp_link    = "https://www.youtube.com/watch?v=dcOwj-QE_ZE"
 defaultButtonString = "color: black;font-size : 15px;border-style: solid;border-width: 1px;border-color: #000000;border-radius: 1px;"
 hoverButtonString = "color: black;font-size : 15px;background-color: gray;border-style: solid;border-width: 1px;border-color: #000000;border-radius: 1px;"
 week_hover = [0, 0, 0, 0, 0, 0, 0]
+daillyDay = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 # =====================================================
 
 # labelClickEvent
@@ -94,11 +97,8 @@ class CWidget(QWidget):
         self.applyBtn.setText("적용하기")
         self.applyBtn.clicked.connect(self.applyBtn_event)
         self.database = pythonDB
-        rows = self.database.test
-        result = rows()
-        print(result)
-        
-
+        self.rows = self.database.test
+        self.updateData()   
         # weekButton Setting 일 ~ 월
         self.days = [QLabel('일'),QLabel('월'),QLabel('화'),QLabel('수'),QLabel('목'),QLabel('금'),QLabel('토'),]
         for i in range(7):
@@ -275,6 +275,8 @@ class CWidget(QWidget):
                 time.sleep(0.5)
                 pyautogui.typewrite(["f"])
 
+                self.rows( daillyDay[ datetime.today().weekday() ])
+                 
                 macro = False
 
         # 자정에 매크로 초기화
@@ -285,6 +287,14 @@ class CWidget(QWidget):
         timer = Timer(1, self.showtime)
         timer.start()
 
+    def updateData(self):
+        global hour, minute, link
+        result = self.rows( daillyDay[ datetime.today().weekday() ])
+        for tuple in result:
+            hour = tuple[0]
+            minute = tuple[1]
+            link = tuple[2]
+            
 
     # 시, 분을 가져오는 함수
     def onActivated(self, text):

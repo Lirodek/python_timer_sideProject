@@ -15,12 +15,34 @@ def open():
     con = pymysql.connect(host='localhost', user='python', password='3302', db='pythonDB', charset='utf8') 
     cur = con.cursor() 
 
-def test():
+def test(TEST):
     open()
     global con, cur
-    
-    sql = "SELECT * FROM timer" 
-
+    sql = """	
+        SELECT 
+		  A.timer_hour		
+		, A.timer_minute
+		, A.LNK
+		FROM (
+            SELECT  timer_hour
+                    , timer_minute
+                    , LNK
+                FROM SELECTDAY 
+                WHERE USER = 'Lirodek'
+                AND TIMER_DATE = DATE_FORMAT(now(), '%Y%m%d')
+            UNION 
+            SELECT timer_hour
+                    , timer_minute 
+                    , LNK
+                FROM loof
+                WHERE USER = 'lirodek'
+                AND """ + TEST + """ = 1
+            ) A
+            WHERE CONCAT(A.timer_hour , A.TIMER_MINUTE) >= CONCAT(DATE_FORMAT(NOW(), '%H%i'))
+            AND TIMER_HOUR >= HOUR(NOW())
+            ORDER BY TIMER_MINUTE
+			LIMIT 1
+        """
     cur.execute(sql) 
     res = cur.fetchall() 
     close()
