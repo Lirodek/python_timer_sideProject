@@ -99,6 +99,7 @@ class CWidget(QWidget):
         self.database = pythonDB
         self.rows = self.database.test
         self.updateData()   
+
         # weekButton Setting 일 ~ 월
         self.days = [QLabel('일'),QLabel('월'),QLabel('화'),QLabel('수'),QLabel('목'),QLabel('금'),QLabel('토'),]
         for i in range(7):
@@ -275,7 +276,7 @@ class CWidget(QWidget):
                 time.sleep(0.5)
                 pyautogui.typewrite(["f"])
 
-                self.rows( daillyDay[ datetime.today().weekday() ])
+                self.updateData()
                  
                 macro = False
 
@@ -290,10 +291,13 @@ class CWidget(QWidget):
     def updateData(self):
         global hour, minute, link
         result = self.rows( daillyDay[ datetime.today().weekday() ])
+        if len(result) == 0 :
+            QMessageBox. question(self, '확인창', '알람설정하시겠어요?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         for tuple in result:
             hour = tuple[0]
             minute = tuple[1]
             link = tuple[2]
+            print(hour)
             
 
     # 시, 분을 가져오는 함수
