@@ -12,7 +12,7 @@ con         = None
 
 def open():
     global cur, con
-    con = pymysql.connect(host='localhost', user='python', password='3302', db='pythonDB', charset='utf8') 
+    con = pymysql.connect(host='pythondb.ctozk8eaqm8x.ap-northeast-2.rds.amazonaws.com', user='pythonDB', password='qmfflwkem2', db='pythonDB', charset='utf8') 
     cur = con.cursor() 
 
 def test(TEST):
@@ -27,7 +27,7 @@ def test(TEST):
             SELECT  timer_hour
                     , timer_minute
                     , LNK
-                FROM SELECTDAY 
+                FROM selectday 
                 WHERE USER = 'Lirodek'
                 AND TIMER_DATE = DATE_FORMAT(now(), '%Y%m%d')
             UNION 
