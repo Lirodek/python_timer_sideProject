@@ -64,6 +64,7 @@ def clickable(widget, text):
                                 global week_hover
                                 if week_hover[i] == 0:
                                     week_hover[i] = 1
+                                    print(week_hover)
                                     widget.setStyleSheet(hoverButtonString)
                                 else:
                                     week_hover[i] = 0
@@ -192,12 +193,7 @@ class CWidget(QWidget):
         for i in range(7):
             hbox6.addWidget(self.days[i])
 
-        # Calendar
-        # hbox5 = QHBoxLayout()
-        # cal = QCalendarWidget(self)
-        # cal.setGridVisible(True)
-        # cal.clicked[QDate].connect(self.showDate)
-        # hbox5.addWidget(cal)
+
 
         vbox = QVBoxLayout()
         vbox.addLayout(hbox1)
@@ -223,19 +219,35 @@ class CWidget(QWidget):
     def create_tab_2(self):
         widget = QWidget()
 
-        hbox1 = QHBoxLayout()
-        textBrowser = QTextBrowser()
-        textBrowser.setAcceptRichText(True)
-        textBrowser .setOpenExternalLinks(True)
-        hbox1.addWidget(textBrowser)
+        # hbox1 = QHBoxLayout()
+        # textBrowser = QTextBrowser()
+        # textBrowser.setAcceptRichText(True)
+        # textBrowser .setOpenExternalLinks(True)
+        # hbox1.addWidget(textBrowser)
 
-        hbox2 = QHBoxLayout()
-        hbox2.addWidget(self.deleteBtn)
+        
+        hbox1 = QHBoxLayout()
+        cal = QCalendarWidget(self)
+        cal.setGridVisible(True)
+        cal.clicked[QDate].connect(self.showDate)
+        hbox1.addWidget(cal)
+
+         # SelectBox  시 분
+        # hbox3 = QHBoxLayout()
+        # hbox3.addWidget(self.comboBoxHour)
+        # hbox3.addWidget(self.comboBoxMinute)
+
+        # #유튜브 링크 click
+        # hbox4 = QGridLayout()
+        # hbox4.addWidget(self.editText)
+        # hbox4.addWidget(self.applyBtn)
 
 
         vbox = QVBoxLayout()
+        # vbox.addLayout(hbox1)
         vbox.addLayout(hbox1)
-        vbox.addLayout(hbox2)
+        # vbox.addLayout(hbox3)
+        # vbox.addLayout(hbox4)
 
         widget.setLayout(vbox)
 
@@ -255,7 +267,7 @@ class CWidget(QWidget):
         self.hour.display(kor.tm_hour)
         self.min.display(kor.tm_min)
         self.sec.display(kor.tm_sec)
-
+        
         # 특정 시간에 매크로 시작
         if kor.tm_hour == hour and kor.tm_min == minute:
             if macro == True :
@@ -275,10 +287,8 @@ class CWidget(QWidget):
                 pyautogui.typewrite(["F11"])
                 time.sleep(0.5)
                 pyautogui.typewrite(["f"])
-
-                self.updateData()
-                 
                 macro = False
+                self.updateData()  
 
         # 자정에 매크로 초기화
         if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
@@ -290,14 +300,18 @@ class CWidget(QWidget):
 
     def updateData(self):
         global hour, minute, link
+        global macro
         result = self.rows( daillyDay[ datetime.today().weekday() ])
-        if len(result) == 0 :
-            QMessageBox. question(self, '확인창', '알람설정하시겠어요?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        # if len(result) == 0 :
+        #     QMessageBox. question(self, '확인창', '저장된 알람이 없습니다.')
+
         for tuple in result:
             hour = tuple[0]
             minute = tuple[1]
             link = tuple[2]
-            print(hour)
+            macro = True
+            print(str(type(hour))+'시'+str(minute)+'분'+str(macro))
+            
             
 
     # 시, 분을 가져오는 함수
@@ -328,11 +342,12 @@ class CWidget(QWidget):
         global minute
         global macro
         global link
+        global week_hover
 
         reply = QMessageBox.question(self, '확인창', '알람설정하시겠어요?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             macro = True
-            self.weekButtonReset()
+           
 
             if self.editText.text() != "":
                 link = self.editText.text()
@@ -340,6 +355,12 @@ class CWidget(QWidget):
             hour = temp_hour
             minute = temp_minute
 
+            insertText = "('lirodek',"+str(hour)+","+str(minute)+","+"'"+str(link)+"'"+","+str(week_hover[0])+","+str(week_hover[1])+","+str(week_hover[2])+","+str(week_hover[3])+","+str(week_hover[4])+","+str(week_hover[5])+","+str(week_hover[6])+")"
+            # insrt시 에러나면 이위치에 로그 찍으셈 0 오류 1 통과
+            self.database.insertLoof(insertText)
+
+            
+            self.weekButtonReset()
         else:
             print('취소되었습니다.')
 

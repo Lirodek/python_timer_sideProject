@@ -15,16 +15,17 @@ def open():
     con = pymysql.connect(host='pythondb.ctozk8eaqm8x.ap-northeast-2.rds.amazonaws.com', user='pythonDB', password='qmfflwkem2', db='pythonDB', charset='utf8') 
     cur = con.cursor() 
 
-def test(TEST):
+def test(test):
     open()
     global con, cur
+    print(test+"DB안의 Set 실행")
     sql = """	
         SELECT 
-		  A.timer_hour		
-		, A.timer_minute
-		, A.LNK
-		FROM (
-            SELECT  timer_hour
+        A.timer_hour      
+      , A.timer_minute
+      , A.LNK
+      FROM (
+         SELECT  timer_hour
                     , timer_minute
                     , LNK
                 FROM selectday 
@@ -36,13 +37,25 @@ def test(TEST):
                     , LNK
                 FROM loof
                 WHERE USER = 'lirodek'
-                AND """ + TEST + """ = 1
+                AND """+test+""" = 1
             ) A
-            WHERE CONCAT(A.timer_hour , A.TIMER_MINUTE) >= CONCAT(DATE_FORMAT(NOW(), '%H%i'))
+            WHERE CONCAT(A.timer_hour , A.TIMER_MINUTE) > CONCAT(DATE_FORMAT(NOW(), '%H%i'))
             AND TIMER_HOUR >= HOUR(NOW())
-            ORDER BY TIMER_MINUTE
-			LIMIT 1
+            ORDER BY CONCAT(A.timer_hour , A.TIMER_MINUTE)
+         LIMIT 1
         """
+    cur.execute(sql) 
+    res = cur.fetchall() 
+    print("result"+str(res))
+    close()
+    return res
+
+def insertLoof(values):
+    open()
+    sql = """
+        INSERT INTO loof 
+        (USER, timer_hour, timer_minute, lnk, sun, mon, tue, wed, thu, fri, sat)
+        VALUES """ + values
     cur.execute(sql) 
     res = cur.fetchall() 
     close()
