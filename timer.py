@@ -1,8 +1,8 @@
 ### intro.
 ## Date : 2020. 11. 26
-## Editer : 성원경 선생님 / 경기기계공업고등학교
+## Editer : 배광민 위피아/주임
 
-### 3. 유튜브 매크로 알람 시계
+### 3. 유튜브 매크로 알람 시계 개선
 
 ### 디지털 시계 코드 
 import sys
@@ -41,6 +41,10 @@ week_hover = [0, 0, 0, 0, 0, 0, 0]
 daillyDay = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 # =====================================================
 
+# =========== select Day variable ===========
+selectDate =''
+# =====================================================
+
 # labelClickEvent
 def clickable(widget, text):
 
@@ -71,7 +75,6 @@ def clickable(widget, text):
                                     widget.setStyleSheet(defaultButtonString)
                                 print(i)
                             i+=1
-
 
                         self.clicked.emit()
                         # The developer can opt for .emit(obj) to get the object within the slot.
@@ -123,8 +126,30 @@ class CWidget(QWidget):
             strMinute = str(minute) + "분"
             self.comboBoxMinute.addItem(strMinute)
 
+        # ========= select Days =========
+        # selectBox 0시~23시
+        self.comboBoxHourSelectDay = QComboBox(self)
+        for hour in range(24):
+            strHours = str(hour) + "시"
+            self.comboBoxHourSelectDay.addItem(strHours)
+        
+        # selectBox 0분~59분
+        self.comboBoxMinuteSelectDay = QComboBox(self)
+        for minute in range(60):
+            strMinute = str(minute) + "분"
+            self.comboBoxMinuteSelectDay.addItem(strMinute)
+        
+        self.editTextSelectDay = QLineEdit()
+        self.applyBtnSelectDay = QPushButton()
+
+        self.applyBtnSelectDay.setText("적용하기")
+        self.applyBtnSelectDay.clicked.connect(self.applyBtn_eventSelectDay)
+
         self.comboBoxHour.activated[str].connect(self.onActivated)
         self.comboBoxMinute.activated[str].connect(self.onActivated)
+
+        self.comboBoxHourSelectDay.activated[str].connect(self.onActivated)
+        self.comboBoxMinuteSelectDay.activated[str].connect(self.onActivated)
 
         
 
@@ -147,9 +172,11 @@ class CWidget(QWidget):
 
         tab_1 = self.create_tab_1()
         tab_2 = self.create_tab_2()
+        tab_3 = self.create_tab_3()
 
-        tab.addTab(tab_1, "알람 설정")
-        tab.addTab(tab_2, "알람 관리")
+        tab.addTab(tab_1, "반복 알람")
+        tab.addTab(tab_2, "날짜 알람")
+        tab.addTab(tab_3, "알람 관리")
     
         main_layout = QVBoxLayout()
         main_layout.addWidget(tab)
@@ -209,7 +236,8 @@ class CWidget(QWidget):
     
     # 캘린더 클릭시 현재 셀렉한 날짜
     def showDate(self, date):
-        print(date.toString())
+        global selectDate
+        selectDate = date.toString("yyyyMMdd")
 
     # 첫번째 탭
     def pressEvent(self):
@@ -230,24 +258,69 @@ class CWidget(QWidget):
         cal = QCalendarWidget(self)
         cal.setGridVisible(True)
         cal.clicked[QDate].connect(self.showDate)
+
         hbox1.addWidget(cal)
 
-         # SelectBox  시 분
-        # hbox3 = QHBoxLayout()
-        # hbox3.addWidget(self.comboBoxHour)
-        # hbox3.addWidget(self.comboBoxMinute)
+        # SelectBox  시 분
+        hbox3 = QHBoxLayout()
+        hbox3.addWidget(self.comboBoxHourSelectDay)
+        hbox3.addWidget(self.comboBoxMinuteSelectDay)
 
-        # #유튜브 링크 click
-        # hbox4 = QGridLayout()
-        # hbox4.addWidget(self.editText)
-        # hbox4.addWidget(self.applyBtn)
+        #유튜브 링크 click
+        hbox4 = QGridLayout()
+        hbox4.addWidget(self.editTextSelectDay)
+        hbox4.addWidget(self.applyBtnSelectDay)
 
 
         vbox = QVBoxLayout()
-        # vbox.addLayout(hbox1)
         vbox.addLayout(hbox1)
-        # vbox.addLayout(hbox3)
-        # vbox.addLayout(hbox4)
+        # vbox.addLayout(hbox2)
+        vbox.addLayout(hbox3)
+        vbox.addLayout(hbox4)
+
+        widget.setLayout(vbox)
+
+        return widget
+    # 세번째 탭
+    def create_tab_3(self):
+        widget = QWidget()
+
+        hbox1 = QHBoxLayout()
+        textBrowser = QTextBrowser(self)
+        textBrowser.setAcceptRichText(True)
+        html = """
+            <table style="border: 1px solid;">
+                <tr>
+                    <td>알람이름</td>
+                    <td>요일</td>
+                    <td>시간</td>
+                </tr>
+                <tr>
+                    <td>알람이름</td>
+                    <td>요일</td>
+                    <td>시간</td>
+                </tr>
+                <tr>
+                    <td>알람이름</td>
+                    <td>요일</td>
+                    <td>시간</td>
+                </tr>
+                <tr>
+                    <td>알람이름</td>
+                    <td>요일</td>
+                    <td>시간</td>
+                </tr>
+            </table>
+        """
+        textBrowser.append(html)
+        hbox1.addWidget(textBrowser)
+
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(self.deleteBtn)
+
+        vbox = QVBoxLayout()
+        vbox.addLayout(hbox1)
+        vbox.addLayout(hbox2)
 
         widget.setLayout(vbox)
 
@@ -288,7 +361,7 @@ class CWidget(QWidget):
                 time.sleep(0.5)
                 pyautogui.typewrite(["f"])
                 macro = False
-                self.updateData()  
+                self.updateData()
 
         # 자정에 매크로 초기화
         if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
@@ -298,6 +371,7 @@ class CWidget(QWidget):
         timer = Timer(1, self.showtime)
         timer.start()
 
+    # 데이터베이스에서 가장 최근의 설정한 시간과 분을 가져오는 함수
     def updateData(self):
         global hour, minute, link
         global macro
@@ -326,6 +400,7 @@ class CWidget(QWidget):
         if text[len(text)-1] == "시":
             global temp_hour
             temp_hour = int(temp)
+        print(str(temp_hour)+","+str(temp_minute))
 
     # 요일 버튼을 리셋해주는 함수
     def weekButtonReset(self):
@@ -335,14 +410,14 @@ class CWidget(QWidget):
             week_hover[i] = 0
             i+=1
 
+    # 버튼 설정버튼 클릭시 동작하는 함수.
     def applyBtn_event(self):
         global temp_hour
         global temp_minute
-        global hour
-        global minute
         global macro
-        global link
+        global temp_link
         global week_hover
+        select_day_ofTheWeek = False
 
         reply = QMessageBox.question(self, '확인창', '알람설정하시겠어요?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
@@ -350,17 +425,49 @@ class CWidget(QWidget):
            
 
             if self.editText.text() != "":
-                link = self.editText.text()
-
-            hour = temp_hour
-            minute = temp_minute
-
-            insertText = "('lirodek',"+str(hour)+","+str(minute)+","+"'"+str(link)+"'"+","+str(week_hover[0])+","+str(week_hover[1])+","+str(week_hover[2])+","+str(week_hover[3])+","+str(week_hover[4])+","+str(week_hover[5])+","+str(week_hover[6])+")"
-            # insrt시 에러나면 이위치에 로그 찍으셈 0 오류 1 통과
-            self.database.insertLoof(insertText)
-
+                temp_link = self.editText.text()
             
+            for i in range(7):
+                if(week_hover[i]==1):
+                    print('요일체크함.')
+                    select_day_ofTheWeek=True
+            
+            if(select_day_ofTheWeek):
+                insertText = "('lirodek',"+str(temp_hour)+","+str(temp_minute)+","+"'"+str(temp_link)+"'"+","+str(week_hover[0])+","+str(week_hover[1])+","+str(week_hover[2])+","+str(week_hover[3])+","+str(week_hover[4])+","+str(week_hover[5])+","+str(week_hover[6])+")"
+                self.database.insertLoof(insertText)
+            else:
+                insertText = "('lirodek', DATE_FORMAT(now(), '%Y%m%d'),"+str(temp_hour)+","+str(temp_minute)+","+"'"+str(temp_link)+"')"
+                self.database.insertToDayTimer(insertText)
+
+            # insrt시 에러나면 이위치에 로그 찍으셈 0 오류 1 통과
+           
+            self.updateData()
             self.weekButtonReset()
+
+        else:
+            print('취소되었습니다.')
+
+    def applyBtn_eventSelectDay(self):
+        print('입장')
+        global temp_hour
+        global temp_minute
+        global macro
+        global temp_link
+
+        reply = QMessageBox.question(self, '확인창', '알람설정하시겠어요?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            macro = True
+           
+            if self.editText.text() != "":
+                temp_link = self.editTextSelectDay.text()
+
+            insertText = "('lirodek', "+str(selectDate)+","+str(temp_hour)+","+str(temp_minute)+","+"'"+str(temp_link)+"')"
+            self.database.insertToDayTimer(insertText)
+
+            # insrt시 에러나면 이위치에 로그 찍으셈 0 오류 1 통과
+            self.updateData()
+            self.weekButtonReset()
+
         else:
             print('취소되었습니다.')
 

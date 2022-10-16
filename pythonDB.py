@@ -50,6 +50,18 @@ def test(test):
     close()
     return res
 
+def insertToDayTimer(data):
+    open()
+    sql = """
+        INSERT INTO selectday
+		(USER, TIMER_DATE, TIMER_HOUR, TIMER_MINUTE, LNK)
+		VALUES 
+    """ + data
+    cur.execute(sql) 
+    res = cur.fetchall() 
+    close()
+    return res
+
 def insertLoof(values):
     open()
     sql = """
