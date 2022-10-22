@@ -300,6 +300,7 @@ class CWidget(QWidget):
 
         return widget
 
+
     # 1초마다 실행시켜주는 함수
     def showtime(self):
         global macro
