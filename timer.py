@@ -43,6 +43,8 @@ daillyDay = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 # =========== select Day variable ===========
 selectDate =''
+SelectDayData = []
+selectLoofData = []
 # =====================================================
 
 # labelClickEvent
@@ -285,41 +287,13 @@ class CWidget(QWidget):
     def create_tab_3(self):
         widget = QWidget()
 
-        hbox1 = QHBoxLayout()
-        textBrowser = QTextBrowser(self)
-        textBrowser.setAcceptRichText(True)
-        html = """
-            <table style="border: 1px solid;">
-                <tr>
-                    <td>알람이름</td>
-                    <td>요일</td>
-                    <td>시간</td>
-                </tr>
-                <tr>
-                    <td>알람이름</td>
-                    <td>요일</td>
-                    <td>시간</td>
-                </tr>
-                <tr>
-                    <td>알람이름</td>
-                    <td>요일</td>
-                    <td>시간</td>
-                </tr>
-                <tr>
-                    <td>알람이름</td>
-                    <td>요일</td>
-                    <td>시간</td>
-                </tr>
-            </table>
-        """
-        textBrowser.append(html)
-        hbox1.addWidget(textBrowser)
+        # hbox1 = self.changeSelectDayTable()
 
         hbox2 = QHBoxLayout()
         hbox2.addWidget(self.deleteBtn)
 
         vbox = QVBoxLayout()
-        vbox.addLayout(hbox1)
+        
         vbox.addLayout(hbox2)
 
         widget.setLayout(vbox)
@@ -365,7 +339,7 @@ class CWidget(QWidget):
 
         # 자정에 매크로 초기화
         if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
-            macro = True
+            self.update()
 
         # 타이머 설정  (1초마다, 콜백함수)
         timer = Timer(1, self.showtime)
@@ -410,6 +384,69 @@ class CWidget(QWidget):
             week_hover[i] = 0
             i+=1
 
+    # 테이블박스를 생성해주는 함수.
+    # def changeSelectDayTable(self):
+    #     global SelectDayData
+    #     row = self.database.selectDayCount()
+    #     self.table = QTableWidget(row[0][0], 5, self)  # row, column
+    #     self.table.setHorizontalHeaderLabels(["", "DATE", "HOUR",  "MINUTE", "LINK"])
+    #     SelectDayData = self.database.selectDayTimer()
+    #     for idx, (key_num, date, hour, minute, lnk) in enumerate(SelectDayData):
+    #         # 사용자정의 item 과 checkbox widget 을, 동일한 cell 에 넣어서 , 추후 정렬 가능하게 한다.
+    #         item = MyQTableWidgetItemCheckBox()
+    #         self.table.setItem(idx, 0, item)
+    #         chbox = MyCheckBox(item)
+    #         # print(chbox.sizeHint())
+    #         self.table.setCellWidget(idx, 0, chbox)
+
+    #         chbox.stateChanged.connect(self.__checkbox_change)  # sender() 확인용 예..
+
+    #         self.table.setItem(idx, 0, QTableWidgetItem(key_num))
+    #         self.table.setItem(idx, 1, QTableWidgetItem(date))
+            
+    #         # 숫자를 기준으로 정렬하기 위함. -- default 는 '문자'임.
+    #         item = QTableWidgetItem()
+    #         item.setData(Qt.DisplayRole, hour)
+    #         self.table.setItem(idx, 2, item)
+
+    #         item2 = QTableWidgetItem()
+    #         item2.setData(Qt.DisplayRole, minute)
+    #         self.table.setItem(idx, 3, item2)
+    #         self.table.setItem(idx, 4, QTableWidgetItem(lnk))
+
+    #         self.table.setSortingEnabled(False)  # 정렬기능
+    #     self.table.resizeRowsToContents()
+    #     self.table.resizeColumnsToContents()  # 이것만으로는 checkbox 컬럼은 잘 조절안됨.
+    #     self.table.setColumnWidth(0, 15)  # checkbox 컬럼 폭 강제 조절.
+
+    #     self.table.cellClicked.connect(self._cellclicked)
+
+    #     # 컬럼 헤더를 click 시에만 정렬하기.
+    #     hheader = self.table.horizontalHeader()  # qtablewidget --> qtableview --> horizontalHeader() --> QHeaderView
+    #     hheader.sectionClicked.connect(self._horizontal_header_clicked)
+    #     vbox = QHBoxLayout(self)
+    #     vbox.addWidget(self.table)
+    #     return vbox
+        # 여기까지 했음. 22.10.17
+
+    def _horizontal_header_clicked(self, idx):
+        """
+        컬럼 헤더 click 시에만, 정렬하고, 다시 정렬기능 off 시킴
+         -- 정렬기능 on 시켜놓으면, 값 바뀌면 바로 자동으로 data 순서 정렬되어 바뀌어 헷갈린다..
+        :param idx -->  horizontalheader index; 0, 1, 2,...
+        :return:
+        """
+        # print("hedder2.. ", idx)
+        self.table.setSortingEnabled(True)  # 정렬기능 on
+        # time.sleep(0.2)
+        self.table.setSortingEnabled(False)  # 정렬기능 off
+
+    
+    def _cellclicked(self, row, col):
+        print(SelectDayData[row])
+        print("_cellclicked... ", row, col)
+
+
     # 버튼 설정버튼 클릭시 동작하는 함수.
     def applyBtn_event(self):
         global temp_hour
@@ -447,6 +484,12 @@ class CWidget(QWidget):
         else:
             print('취소되었습니다.')
 
+    
+    # def __checkbox_change(self, checkvalue):
+    #     # print("check change... ", checkvalue)
+    #     chbox = self.sender()  # signal을 보낸 MyCheckBox instance
+    #     print("checkbox sender row = ", chbox.get_row())
+
     def applyBtn_eventSelectDay(self):
         print('입장')
         global temp_hour
@@ -470,6 +513,42 @@ class CWidget(QWidget):
 
         else:
             print('취소되었습니다.')
+# class MyCheckBox(QCheckBox):
+#     def __init__(self, item):
+#         """
+#         :param item: QTableWidgetItem instance
+#         """
+#         super().__init__()
+#         self.item = item
+#         self.mycheckvalue = 0   # 0 --> unchecked, 2 --> checked
+#         self.stateChanged.connect(self.__checkbox_change)
+#         self.stateChanged.connect(self.item.my_setdata)  # checked 여부로 정렬을 하기위한 data 저장
+
+#     def __checkbox_change(self, checkvalue):
+#         # print("myclass...check change... ", checkvalue)
+#         self.mycheckvalue = checkvalue
+#         print("checkbox row= ", self.get_row())
+
+#     def get_row(self):
+#         return self.item.row()
+# class MyQTableWidgetItemCheckBox(QTableWidgetItem):
+#     """
+#     checkbox widget 과 같은 cell 에  item 으로 들어감.
+#     checkbox 값 변화에 따라, 사용자정의 data를 기준으로 정렬 기능 구현함.
+#     """
+#     def __init__(self):
+#         super().__init__()
+#         self.setData(Qt.UserRole, 0)
+
+#     def __lt__(self, other):
+#         # print(type(self.data(Qt.UserRole)))
+#         return self.data(Qt.UserRole) < other.data(Qt.UserRole)
+
+#     def my_setdata(self, value):
+#         # print("my setdata ", value)
+#         self.setData(Qt.UserRole, value)
+#         # print("row ", self.row())
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

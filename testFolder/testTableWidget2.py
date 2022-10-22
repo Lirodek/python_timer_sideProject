@@ -9,7 +9,7 @@ import pythonDB
 
 import time
 
-data=[]
+SelectDayData=[]
 
 class MyFrame(QWidget):
     def __init__(self):
@@ -21,10 +21,10 @@ class MyFrame(QWidget):
         
 
         self.table.setHorizontalHeaderLabels(["", "DATE", "HOUR",  "MINUTE", "LINK"])
-        global data
-        data = self.database.selectDayTimer()
+        global SelectDayData
+        SelectDayData = self.database.selectDayTimer()
 
-        for idx, (key_num, date, hour, minute, lnk) in enumerate(data):
+        for idx, (key_num, date, hour, minute, lnk) in enumerate(SelectDayData):
             # 사용자정의 item 과 checkbox widget 을, 동일한 cell 에 넣어서 , 추후 정렬 가능하게 한다.
             item = MyQTableWidgetItemCheckBox()
             self.table.setItem(idx, 0, item)
@@ -68,7 +68,7 @@ class MyFrame(QWidget):
         print("checkbox sender row = ", chbox.get_row())
 
     def _cellclicked(self, row, col):
-        print(data[row])
+        print(SelectDayData[row])
         print("_cellclicked... ", row, col)
 
     def _horizontal_header_clicked(self, idx):
