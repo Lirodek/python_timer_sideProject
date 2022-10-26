@@ -41,7 +41,7 @@ def test(test):
             ) A
             WHERE CONCAT(A.timer_hour , A.TIMER_MINUTE) > CONCAT(DATE_FORMAT(NOW(), '%H%i'))
             AND TIMER_HOUR >= HOUR(NOW())
-            ORDER BY CONCAT(A.timer_hour , A.TIMER_MINUTE)
+            ORDER BY A.timer_hour , A.TIMER_MINUTE
          LIMIT 1
         """
     cur.execute(sql) 

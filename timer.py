@@ -359,7 +359,7 @@ class CWidget(QWidget):
             minute = tuple[1]
             link = tuple[2]
             macro = True
-            print(str(type(hour))+'시'+str(minute)+'분'+str(macro))
+            print(str(hour)+'시'+str(minute)+'분'+str(macro))
             
             
 
@@ -383,7 +383,7 @@ class CWidget(QWidget):
         for day in self.days:
             day.setStyleSheet(defaultButtonString)
             week_hover[i] = 0
-            i+=1
+            i+=1    
 
     # 테이블박스를 생성해주는 함수.
     # def changeSelectDayTable(self):
