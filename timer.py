@@ -24,7 +24,7 @@ macro = True
 # ========== 전역 변수 이 값을 바꿀경우  시간, 분등이 바뀜 =========
 hour    = 17
 minute  = 10
-link    = "https://www.youtube.com/watch?v=Y8JFxS1HlDo"
+link    = "https://www.youtube.com/watch?v=M4Ot-k4AWv4"
 # =================================================================
 
 # =================== 전역 저장전에 삽입할 템프 ===================
@@ -326,7 +326,6 @@ class CWidget(QWidget):
                 time.sleep(0.5)
                 pyautogui.typewrite(['enter'])
                 time.sleep(0.5)
-                #pyautogui.typewrite("https://youtu.be/3iM_06QeZi8")
                 clipboard.copy(link)
                 pyautogui.hotkey("ctrl", "V")
                 time.sleep(0.5)
@@ -340,7 +339,7 @@ class CWidget(QWidget):
 
         # 자정에 매크로 초기화
         if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
-            self.update()
+            self.updateData()
 
         # 타이머 설정  (1초마다, 콜백함수)
         timer = Timer(1, self.showtime)
@@ -383,7 +382,7 @@ class CWidget(QWidget):
         for day in self.days:
             day.setStyleSheet(defaultButtonString)
             week_hover[i] = 0
-            i+=1    
+            i+=1
 
     # 테이블박스를 생성해주는 함수.
     # def changeSelectDayTable(self):
@@ -479,6 +478,7 @@ class CWidget(QWidget):
 
             # insrt시 에러나면 이위치에 로그 찍으셈 0 오류 1 통과
            
+
             self.updateData()
             self.weekButtonReset()
 
