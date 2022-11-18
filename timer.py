@@ -110,8 +110,16 @@ class CWidget(QWidget):
         # 자정에 매크로 초기화
         if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
             self.updateData()
+<<<<<<< Updated upstream
             macro = True
 
+=======
+        # testHour = 12
+        # testMinute = 46
+        # if kor.tm_hour == testHour and kor.tm_min == testMinute and kor.tm_hour == testHour and kor.tm_sec == 0 :
+        #     print("이거 실행됐어")
+        #     self.updateData()
+>>>>>>> Stashed changes
 
         # 타이머 설정  (1초마다, 콜백함수)
         timer = Timer(1, self.showtime)
