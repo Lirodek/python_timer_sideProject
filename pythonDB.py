@@ -13,7 +13,7 @@ con         = None
 def open():
     global cur, con
     # pythondb.ctozk8eaqm8x.ap-northeast-2.rds.amazonaws.com
-    con = pymysql.connect(host='127.0.0.1', user='python', password='3302', db='pythonDB', charset='utf8') 
+    con = pymysql.connect(host='', user='', password='', db='', charset='utf8') 
     cur = con.cursor() 
 
 def test(TEST):
