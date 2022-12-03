@@ -120,7 +120,7 @@ def _close():
 #         global cur
 #         global con
 #         # 데이터베이스 연결
-#         con = pymysql.connect(host='localhost', user='python', password='3302', db='pythonDB', charset='utf8') 
+#         con = pymysql.connect(host='localhost', user='python', password='3302', db='timer', charset='utf8') 
     
 #         # STEP 3: Connection 으로부터 Cursor 생성
 #         cur = con.cursor()
