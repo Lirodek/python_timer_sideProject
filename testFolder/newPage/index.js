@@ -20,6 +20,11 @@ document.addEventListener('keydown', function(event) {
 		second = second + minute;
 	}
 	second = second+5;
-    playBookmark(second);
+	try{
+		playBookmark(second);
+	}catch{
+		
+	}
+    
   }
 });
