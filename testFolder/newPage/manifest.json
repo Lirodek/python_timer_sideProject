@@ -1,0 +1,11 @@
+{
+    "manifest_version" : 3,
+    "name" : "next 30",
+    "version" : "0.1",
+    "content_script" : [
+        {
+            "matches" : ["<all_urls>"],
+            "js":["index.js"]
+        }
+    ]
+}
