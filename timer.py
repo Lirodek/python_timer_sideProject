@@ -338,7 +338,13 @@ class CWidget(QWidget):
                 self.updateData()
 
         # 자정에 매크로 초기화
-        if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
+        # if kor.tm_hour == 0 and kor.tm_min == 0 and kor.tm_hour == 0 and kor.tm_sec == 0 :
+        #     self.updateData()
+
+        testHour = 13
+        testMinute = 7
+        # 자정에 매크로 초기화
+        if kor.tm_hour == testHour and kor.tm_min == testMinute and kor.tm_hour == testHour and kor.tm_sec == 0 :
             self.updateData()
 
         # 타이머 설정  (1초마다, 콜백함수)

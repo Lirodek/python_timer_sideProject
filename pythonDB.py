@@ -12,7 +12,7 @@ con         = None
 # Database를 열어주는 함수
 def _open():
     global cur, con
-    con = pymysql.connect(host='pythondb.ctozk8eaqm8x.ap-northeast-2.rds.amazonaws.com', user='pythonDB', password='qmfflwkem2', db='pythonDB', charset='utf8') 
+    con = pymysql.connect(host='127.0.0.1', user='python', password='3302', db='pythonDB', charset='utf8') 
     cur = con.cursor() 
 
 # 현재 데이터베이스 안의 루프함수와, 날짜 함수 안의 원하는 데이터를 가져옵니다.
