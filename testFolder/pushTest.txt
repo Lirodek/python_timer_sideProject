@@ -1,3 +1,9 @@
-배광민 테스트 123
-푸시 테스트다
-4
+document.addEventListener('keydown', function(event) {
+  if (event.keyCode === 39) { // 39 is the key code for the right arrow key
+	let checkTimer = document.getElementsByClassName('fp-elapsed')[0].textContent;
+	checkTimer = checkTimer.split(':');
+	checkTimer[0] += checkTimer[1] * 60;
+      	checkTimer += 5;
+    	playBookmark(checkTimer);
+  }
+});
