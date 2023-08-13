@@ -6,11 +6,12 @@ document.addEventListener('keydown', function(event) {
 	let second = 0;
 	checkTimer = checkTimer.split(':');
 	if(checkTimer.length == 3){
+		console.log('여기실행됨');
 		hour = parseInt(checkTimer[0]);
 		minute = parseInt(checkTimer[1]);
 		second = parseInt(checkTimer[2]);
 		minute *= 60;
-		hour *= 360;
+		hour *= 3600;
 		second = second + minute + hour;
 	} else {
 		minute = parseInt(checkTimer[0]);
